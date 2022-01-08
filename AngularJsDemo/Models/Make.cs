@@ -30,6 +30,15 @@ namespace AngularJsDemo.Models
                 .WithOne(p => p.Make)
                 .HasForeignKey(p => p.MakeId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasData(
+                    new Make { Id = 1, Name = "Lamborghini" },
+                    new Make { Id = 2, Name = "Ferrari" },
+                    new Make { Id = 3, Name = "Bugatti" },
+                    new Make { Id = 4, Name = "Koenigsegg" },
+                    new Make { Id = 5, Name = "Mercedes" }
+                );
         }
     }
 }

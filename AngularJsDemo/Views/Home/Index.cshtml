@@ -2,7 +2,59 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container" ng-app="carRental" ng-controller="ctrl">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <label>Marka</label>
+                    <select class="form-control" asp-items="ViewBag.Makes" ng-model="currentMakeId" ng-change="getModels()">
+                        <option>[Seçiniz}</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>Model</label>
+                    <div ng-show="wait">
+                        <img src="~/images/preloader.svg" />
+                        Lütfen bekleyiniz....
+                    </div>
+                    <select class="form-control" ng-show="!wait" ng-model="currentModelId" ng-options="model as model.name for model in models track by model.id">
+                        <option>[Seçiniz}</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>Gün</label>
+                    <select class="form-control">
+                        <option>[Seçiniz}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+<script src="~/lib/angular.js/angular.min.js"></script>
+<script>
+    var app = angular.module("carRental", []);
+
+    app.controller("ctrl", ($scope, $http)=>{
+
+        $scope.models = [];
+        $scope.wait = false;
+
+        $scope.getModels = () => {
+            $scope.wait = true;
+            var url = `/home/getmodels/${$scope.currentMakeId}`;
+            $http
+            .get(url)
+            .then((response)=>{
+
+                $scope.models = response.data;
+                $scope.wait = false;
+            });
+        };
+
+    })
+</script>
+}
